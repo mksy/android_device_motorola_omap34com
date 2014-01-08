@@ -57,7 +57,8 @@ PRODUCT_PACKAGES += \
 
 # DSP
 PRODUCT_PACKAGES += \
-	cexec.out libbridge
+	dspexec \
+	libbridge
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -73,18 +74,37 @@ PRODUCT_PACKAGES += \
 	libOMX.TI.WBAMR.decode \
 	libOMX.TI.WBAMR.encode \
 	libOMX.TI.WMA.decode \
+	libOMX.TI.JPEG.Encoder \
 	libOMX.TI.JPEG.decoder \
 	libOMX.TI.ILBC.decode \
 	libOMX.TI.ILBC.encode \
 	libOMX.TI.VPP \
-#	libLCML
+	libVendor_ti_omx \
+
+# Wifi
+#PRODUCT_PACKAGES += \
+#	iwmulticall hostap wlan_loader wlan_cu wpa_supplicant \
+#	libhostapdcli libCustomWifi libwpa_client libtiOsLib \
+#	tiwlan.ini dhcpcd.conf wpa_supplicant.conf hostapd.conf \
+#	tiap_loader tiap_cu ndc
 
 # Wifi
 PRODUCT_PACKAGES += \
-	iwmulticall hostap wlan_loader wlan_cu wpa_supplicant \
-	libhostapdcli libCustomWifi libwpa_client libtiOsLib \
-	tiwlan.ini dhcpcd.conf wpa_supplicant.conf hostapd.conf \
-	tiap_loader tiap_cu ndc
+    lib_driver_cmd_wl12xx \
+    dhcpcd.conf \
+    hostapd.conf \
+    wpa_supplicant.conf \
+    TQS_D_1.7.ini \
+    TQS_D_1.7_127x.ini \
+    crda \
+    regulatory.bin \
+    calibrator 
+
+# wifi props
+#PRODUCT_PROPERTY_OVERRIDES += \
+#        wifi.interface=wlan0 \
+#        softap.interface=wlan0 \
+#        wifi.supplicant_scan_interval=60 \
 
 # Bluetooth configuration files
 PRODUCT_COPY_FILES += \
@@ -237,6 +257,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	windowsmgr.max_events_per_sec=300 \
 	com.ti.omap_compat=1 \
 	com.ti.omap_enhancement=true
+
+# props for 512mb devices
+PRODUCT_PROPERTY_OVERRIDES += \
+        ro.config.low_ram=true \
+        dalvik.vm.jit.codecachesize=0 \
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise

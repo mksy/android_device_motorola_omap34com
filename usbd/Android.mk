@@ -9,5 +9,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := usbd
 
 LOCAL_SHARED_LIBRARIES := libcutils libc
+LOCAL_STATIC_LIBRARIES := liblog
 
 include $(BUILD_EXECUTABLE) 

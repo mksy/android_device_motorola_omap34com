@@ -22,18 +22,26 @@ USE_CAMERA_STUB := false
 # Use the non-open-source parts, if they're present
 -include vendor/motorola/omap34com/BoardConfigVendor.mk
 
+TARGET_ARCH := arm
+
 # Processor
 TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM := omap3
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_SMP := false
+TARGET_CPU_VARIANT := cortex-a8
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_ARCH_VARIANT_CPU := cortex-a8
 TARGET_ARCH_VARIANT_FPU := neon
 TARGET_GLOBAL_CFLAGS += -mtune=cortex-a8
 TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a8
 ARCH_ARM_HAVE_TLS_REGISTER := false
+
+# Conserve memory in the Dalvik heap
+# Details: https://github.com/CyanogenMod/android_dalvik/commit/15726c81059b74bf2352db29a3decfc4ea9c1428
+TARGET_ARCH_LOWMEM := true
+TARGET_ARCH_HAVE_NEON := true
 
 # Kernel
 BOARD_KERNEL_BASE := 0x10000000
@@ -64,30 +72,22 @@ TARGET_RECOVERY_PRE_COMMAND_CLEAR_REASON := true
 BOARD_MKE2FS := device/motorola/omap34com/releaseutils/mke2fs
 
 # Wifi related defines
-BOARD_WLAN_DEVICE           := wl1271
-WPA_SUPPLICANT_VERSION      := VER_0_6_X
-BOARD_WPA_SUPPLICANT_DRIVER := CUSTOM
-WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/tiwlan_drv.ko"
-WIFI_DRIVER_MODULE_NAME     := tiwlan_drv
-WIFI_DRIVER_FW_STA_PATH     := "/system/etc/wifi/fw_wlan1271.bin"
-WIFI_FIRMWARE_LOADER        := wlan_loader
-PRODUCT_WIRELESS_TOOLS      := true
-BOARD_SOFTAP_DEVICE         := wl1271
-WIFI_DRIVER_FW_AP_PATH      := "/system/etc/wifi/fw_tiwlan_ap.bin"
-WPA_SUPPL_APPROX_USE_RSSI   := true
-WPA_SUPPL_WITH_SIGNAL_POLL  := true
-# CM9
-WIFI_AP_DRIVER_MODULE_PATH  := "/system/lib/modules/tiap_drv.ko"
-WIFI_AP_DRIVER_MODULE_NAME  := tiap_drv
-WIFI_AP_FIRMWARE_LOADER     := wlan_ap_loader
-WIFI_AP_DRIVER_MODULE_ARG   := ""
-BOARD_HOSTAPD_SERVICE_NAME  := hostap_netd
-BOARD_HOSTAPD_NO_ENTROPY    := true
-BOARD_HOSTAPD_DRIVER        := true
-BOARD_HOSTAPD_DRIVER_NAME   := wilink
+USES_TI_MAC80211 := true
+COMMON_GLOBAL_CFLAGS += -DUSES_TI_MAC80211
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wl12xx
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_wl12xx
+PRODUCT_WIRELESS_TOOLS := true
+BOARD_WLAN_DEVICE := wl12xx_mac80211
+BOARD_SOFTAP_DEVICE := wl12xx_mac80211
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wl12xx_sdio.ko"
+WIFI_DRIVER_MODULE_NAME := "wl12xx_sdio"
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_TI := true
 
 # Sensors
 ENABLE_SENSORS_COMPAT := true
